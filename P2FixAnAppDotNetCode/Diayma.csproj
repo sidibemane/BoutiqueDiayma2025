@@ -1,9 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
+  <!-- Fichiers à exclure de la compilation et du contenu -->
   <ItemGroup>
     <Compile Remove="Infrastructure\**" />
     <Compile Remove="Models\ViewModel\**" />
@@ -32,16 +33,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.3" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="Resources\Models\ViewModels\Order.en.resx" />
   </ItemGroup>
 
+  <!-- Packages compatibles avec .NET 6 -->
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.6" />
-    <PackageReference Include="Microsoft.Extensions.Localization" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="6.0.0" />
   </ItemGroup>
 
 </Project>

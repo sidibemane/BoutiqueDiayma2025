@@ -3,7 +3,6 @@ using System.Globalization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Localization;
-using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -22,26 +21,30 @@ namespace P2FixAnAppDotNetCode
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Configuration des ressources
             services.AddLocalization(opts => { opts.ResourcesPath = "Resources"; });
+
+            // Injection de dépendances
             services.AddSingleton<ICart, Cart>();
             services.AddSingleton<ILanguageService, LanguageService>();
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<IOrderService, OrderService>();
             services.AddTransient<IOrderRepository, OrderRepository>();
+
             services.AddMemoryCache();
             services.AddSession();
-            services.AddMvc()
-                .AddViewLocalization(
-                    LanguageViewLocationExpanderFormat.Suffix,
-                    opts => { opts.ResourcesPath = "Resources"; })
+
+            // Ajout du support MVC avec localisation
+            services.AddControllersWithViews()
+                .AddViewLocalization()
                 .AddDataAnnotationsLocalization();
 
+            // Configuration des cultures disponibles (français, anglais, wolof)
             services.Configure<RequestLocalizationOptions>(opts =>
-            { 
+            {
                 var supportedCultures = new List<CultureInfo>
                 {
                     new CultureInfo("en-GB"),
@@ -49,28 +52,47 @@ namespace P2FixAnAppDotNetCode
                     new CultureInfo("en"),
                     new CultureInfo("fr-FR"),
                     new CultureInfo("fr"),
+                    new CultureInfo("wo") // Ajout de Wolof
                 };
 
                 opts.DefaultRequestCulture = new RequestCulture("en");
-                // Formatting numbers, dates, etc.
                 opts.SupportedCultures = supportedCultures;
-                // UI strings that we have localized.
                 opts.SupportedUICultures = supportedCultures;
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            if (env.EnvironmentName == "Development")
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+                // Désactivation de HSTS pour éviter les erreurs SSL sur localhost
+                // app.UseHsts(); 
+            }
+
+            // Désactivation de la redirection HTTPS pour HTTP simple
+            // app.UseHttpsRedirection(); 
+
             app.UseStaticFiles();
+
+            // Activation de la localisation
             var options = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
             app.UseRequestLocalization(options.Value);
+
+            app.UseRouting();
             app.UseSession();
-            app.UseMvc(routes =>
+            app.UseAuthorization();
+
+            // Configuration des endpoints
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
+                endpoints.MapControllerRoute(
                     name: "default",
-                    template: "{controller=Product}/{action=Index}/{id?}");
+                    pattern: "{controller=Product}/{action=Index}/{id?}");
             });
         }
     }

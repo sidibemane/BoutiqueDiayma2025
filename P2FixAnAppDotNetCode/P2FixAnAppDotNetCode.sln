@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Diayma", "Diayma.csproj", "{94AE5435-B1C4-FB53-7C24-4FECC7A22321}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{94AE5435-B1C4-FB53-7C24-4FECC7A22321}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94AE5435-B1C4-FB53-7C24-4FECC7A22321}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94AE5435-B1C4-FB53-7C24-4FECC7A22321}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94AE5435-B1C4-FB53-7C24-4FECC7A22321}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D6530D7F-8A5D-4097-A4DD-B49410228F20}
+	EndGlobalSection
+EndGlobal
